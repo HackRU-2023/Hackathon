@@ -1,7 +1,10 @@
 import axios from "axios";
 
 export const exchangeTranscript = async (transcript) => {
-  console.log(transcript);
+  if (transcript == "") {
+    return;
+  }
+  console.log("here");
   const response = await axios.post(
     "/api/transcription_exchange",
     {

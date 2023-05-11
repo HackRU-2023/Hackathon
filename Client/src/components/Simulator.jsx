@@ -16,6 +16,27 @@ const Simulator = (simulatorConfig) => {
     setIsSimulationRunning(!isSimulationRunning);
   };
 
+  const debounce = (func, wait) => {
+    let timeout;
+    return (...args) => {
+      const context = this;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        timeout = null;
+        func.apply(context, args);
+      }, wait);
+    };
+  };
+  const handleTranscriptReady = async (transcript) => {
+    const mp3Blob = await exchangeTranscript(transcript);
+    if (mp3Blob == "") {
+      return;
+    }
+    const newMp3Url = URL.createObjectURL(mp3Blob);
+    setMp3Urls((prevUrls) => [...prevUrls, newMp3Url]);
+  };
+  const debouncedHandleTranscriptReady = debounce(handleTranscriptReady, 2000);
+
   const startListening = () => {
     setIsListening(true);
 
@@ -33,8 +54,10 @@ const Simulator = (simulatorConfig) => {
 
     recognizer.recognized = (s, e) => {
       if (e.result.reason === 3) {
-        console.log(e.result.text);
-        handleTranscriptReady(e.result.text);
+        if (e.result.text == "") {
+          return;
+        }
+        debouncedHandleTranscriptReady(e.result.text);
         console.log(`RECOGNIZED: Text=${e.result.text}`);
       }
     };
@@ -56,14 +79,9 @@ const Simulator = (simulatorConfig) => {
     // Start the continuous recognition
     recognizer.startContinuousRecognitionAsync();
   };
+
   const stopListening = () => {
     setIsListening(false);
-  };
-
-  const handleTranscriptReady = async (transcript) => {
-    const mp3Blob = await exchangeTranscript(transcript);
-    const newMp3Url = URL.createObjectURL(mp3Blob);
-    setMp3Urls((prevUrls) => [...prevUrls, newMp3Url]);
   };
 
   return (
@@ -81,7 +99,7 @@ const Simulator = (simulatorConfig) => {
           <img
             src="../person.png"
             alt="Profile Image"
-            className="max-h-full max-w-full object-contain rounded-full pl-4"
+            className="max-h-full max-w-full object-contain rounded           w-full pl-4"
           />
         </div>
       </div>
@@ -106,7 +124,7 @@ const Simulator = (simulatorConfig) => {
         {mp3Urls.map((url, index) => (
           <div key={index} className="mb-4">
             <h3>AI Response {index + 1}:</h3>
-            <audio src={url} controls />
+            <audio src={url} controls autoPlay />
           </div>
         ))}
       </div>

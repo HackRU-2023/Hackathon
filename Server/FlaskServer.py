@@ -2,7 +2,7 @@ import json
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 
-from Server.Simulator.OpenAISimulator import OpenAISimulator
+from Simulator.OpenAISimulator import OpenAISimulator
 from Server.Utils.Voice import Voice
 
 app = Flask(__name__)
@@ -31,7 +31,7 @@ def get_data():
 @app.route('/api/transcription_exchange', methods=['POST'])
 def post_transcription():
     # Retrieve the string from the client request
-    string_from_client = request.json.get('string')
+    string_from_client = request.json.get('transcript')
     # Perform any necessary operations or retrieve data from a database
 
     #################################
@@ -42,10 +42,10 @@ def post_transcription():
         result, emotion = simulator.generate_answer(simulation_id, string_from_client)
         if emotion not in emotions_models:
             emotion = "NATURAL"
-        voice.generate_emotional_speech(result, emotions_models[emotion], "audio/curr_speech_file.wav")
 
+        voice.generate_emotional_speech(result, emotions_models[emotion], "audio/curr_speech_file.wav")
     print(result)
-    return send_file("audio/curr_speech_file.wav", mimetype='audio/mp3')
+    return send_file("audio/curr_speech_file.wav", mimetype='audio/x-wav')
     ############################
 
 
@@ -53,7 +53,6 @@ if __name__ == '__main__':
     config = load_config_file("configuration.json")
     voice_config = load_config_file("Utils/config_voice.json")
     emotions_models = voice_config["emotions_models"]
-    voice_model = voice_config["emotions_models"]["Nervous"]
 
     ########################################################
     simulator = OpenAISimulator()

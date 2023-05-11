@@ -46,4 +46,4 @@ class OpenAISimulator(Simulator):
         )
         response = completion['choices'][0]['message']['content']
         simulation.extend_conversation(response, 'assistant')
-        return response
+        return response, "NATURAL"

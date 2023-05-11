@@ -13,7 +13,7 @@ instance/
 
 # JSON files
 *.json
-
+!Utils/config_voice.json
 # Media files
 *.mp4
 *.wav

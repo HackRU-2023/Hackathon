@@ -1,0 +1,12 @@
+{
+  "emotions_models" : {
+    "CALM": "en-US-AshleyNeural",
+    "ANGRY": "en-US-AIGenerate1Neural",
+    "HAPPY": "en-US-AshleyNeural",
+    "HOPEFUL": "en-US-AshleyNeural",
+    "CONFUSED": "en-US-AIGenerate1Neural",
+    "DISAPPOINTED": "en-US-AIGenerate1Neural",
+    "NATURAL": "en-US-AshleyNeural",
+    "SURPRISED": "en-US-AshleyNeural"
+  }
+}

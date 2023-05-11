@@ -1,5 +1,6 @@
 import hashlib
 import secrets
+import time
 
 
 class Simulation:
@@ -11,7 +12,12 @@ class Simulation:
         self.call_subject = call_subject
         self.messages = []
         self.personality = personality
+        self.possible_emotions = ["CALM", "ANGRY", "HAPPY", "SURPRISED", "HOPEFUL", "CONFUSED", "DISAPPOINTED",
+                                  "NATURAL"]
         self.load_system()
+        self.simulation_start_time = time.time()
+
+
 
     def load_system(self):
         content = f"""
@@ -20,7 +26,7 @@ class Simulation:
         - You are calling {self.company_description} for assistance or information.
         - The call subject is {self.call_subject}
         - Your initial emotions are: {self.emotions}.
-        - Your personality is: {self.personality}.
+        - Your personality is (Weak personality trait = 1 ... Strong personality trait = 10): {self.personality}.
 
         Please keep the following in mind as you respond to the company representative:
 
@@ -33,8 +39,13 @@ class Simulation:
         - Your responses will be converted to a voice message, so try to make them sound natural.
         - Respond based on your current emotions and personality.
         - Change your emotions based on the representative's responses.
-        - In the end of your answer mention your current mood. for example   .... answer .... (ANGRY)
+        - In the end of your answer mention your current mood. for example   .... answer .... ְְְ*ANGRY*
+        - In your answer include words that express your emotions.
+        - Select the mood from the following list {str(self.possible_emotions)}
         - If you want to pause to express that something take time type (PAUSE)
+        - Its important that you will answer short and natural as possible
+        - Do not repeat on yourself!
+        - Do not repeat on what the company representative said!
         """
         self.messages.append({"role": "system", "content": content})
 

@@ -5,9 +5,10 @@ import time
 
 
 simulator = OpenAISimulator()
-simulation_id = simulator.start_simulation('A company that provide internet', "Angry, disappointed",
-                                           "Young man usually friendly",
+simulation_id = simulator.start_simulation('A company that provide internet', "Angry",
+                                           "{Cheap:10, Friendly : 4}",
                                            "He paying for 100mb internet but only get 5mb after internet check")
+
 
 answer = simulator.generate_answer(simulation_id, "Hello, how can i help")
 print(answer)
@@ -24,8 +25,8 @@ while True:
         break
 
     start = time.time()
-    answer = simulator.generate_answer(simulation_id, question)
-    print(answer)
+    answer, mood = simulator.generate_answer(simulation_id, question)
+    print(f"Mood: {mood}\n"+answer)
     #voice.generate_emotional_speech(answer, 'en-US-AIGenerate1Neural', "test.wav")
     sum += time.time() - start
     bt += 1

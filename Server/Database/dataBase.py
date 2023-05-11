@@ -1,4 +1,7 @@
+import json
+
 from Server.Database.connection import InitMongo
+from Server.Database.dbJeson import *
 from Server.Models.agent import Agent
 from Server.Models.simulation import Simulation
 from Server.Models.templateSimulation import TemplateSimulation
@@ -9,7 +12,9 @@ class DataBase:
         db_connection = db_connection
         self.mydb = db_connection._client["HackRu"]
 
-    def get_agent(self, user_name, password):
+    def get_agent(self, agent):
+        user_name = agent['user_name']
+        password = agent['password']
         mycol = self.mydb["agents"]
         myquery = {"user_name": user_name, "password": password}
         mydoc = mycol.find(myquery)
@@ -19,16 +24,13 @@ class DataBase:
             skills = key['skills']
             simulation = key['simulation']
         agent = Agent(user_name, password,id,position,skills,simulation)
-        return agent
+        jsonStr = json.dumps(agent.__dict__)
+        return jsonStr
 
     def get_client_skills(self):
         mycol = self.mydb["clientSkills"]
-        mydoc = mycol.find()
-        skills = []
-        for key in mydoc:
-            skills = key['personal']
-
-        return skills
+        mydoc = mycol.find_one()
+        return mydoc
 
     def get_template_sim(self):
         mycol = self.mydb["templateSimulation"]
@@ -69,8 +71,8 @@ class DataBase:
         print(result.inserted_id)
 
     def set_template_sim(self, sim):
-        mydb = self._client["HackRu"]
-        mycol = mydb["agentSkills"]
+
+        mycol = self.mydb["clientSkills"]
         result = mycol.insert_one(sim)
         if result.inserted_id:
             print("Insert Simulation Successfully")
@@ -78,8 +80,8 @@ class DataBase:
 
 db_connection = InitMongo()
 db = DataBase(db_connection)
-agent = db.get_agent("intSer","123456")
-agent.add_simulation(78)
-value = [1,2,3,4,5,6,7]
-agent.update_skills(value)
-db.update_agent(agent)
+agent1 = {
+    "user_name": "intSer",
+    "password": "123456",
+}
+agent = db.get_agent(agent1)

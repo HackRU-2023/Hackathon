@@ -2,6 +2,8 @@ import json
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 
+from Server.Database.connection import InitMongo
+from Server.Database.dataBase import DataBase
 from Server.Simulator.OpenAISimulator import OpenAISimulator
 from Server.Utils.Voice import Voice
 
@@ -20,13 +22,38 @@ def load_config_file(config_path):
 def home():
     return jsonify({'message': 'Hello from Flask server!'})
 
-
+@app.route('/api/login', methods=['GET'])
+def login():
+    agent = {
+        "user_name": "intSer",
+        "password": "123456",
+    }
+    # Perform any necessary operations or retrieve data from a database
+    agent_login = db.get_agent(agent)
+    return jsonify(agent_login)
 @app.route('/api/data', methods=['GET'])
 def get_data():
     # Perform any necessary operations or retrieve data from a database
     data = {'data': [1, 2, 3, 4, 5]}
     return jsonify(data)
 
+@app.route('/api/skills_fill', methods=['GET'])
+def get_skills_to_fill():
+    # Perform any necessary operations or retrieve data from a database
+    skills = db.get_client_skills()
+    return jsonify(skills)
+
+@app.route('/api/skills_template', methods=['GET'])
+def get_skills_template():
+    # Perform any necessary operations or retrieve data from a database
+    skills = db.get_client_skills()
+    return jsonify(skills)
+
+@app.route('/api/skills_agent_template', methods=['GET'])
+def get_skills_agent_template():
+    # Perform any necessary operations or retrieve data from a database
+    skills = db.get_client_skills()
+    return jsonify(skills)
 
 @app.route('/api/transcription_exchange', methods=['POST'])
 def post_transcription():
@@ -65,7 +92,8 @@ if __name__ == '__main__':
     # Example usage
 
     voice = Voice(config)
-
+    db_connection = InitMongo()
+    db = DataBase(db_connection)
     # text1 = ".Don't speak like that"
     # voice.generate_emotional_speech(text1, voice_model)  # , filename="outputFix.wav")
     # voice.recognize_from_microphone_or_audio_file(audio_file_path="outputFix.wav")

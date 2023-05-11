@@ -38,7 +38,6 @@ class DataBase:
         return temp_sim
 
 
-
     def set_simulation(self, sim):
         mycol = self.mydb["simulations"]
         result = mycol.insert_one(sim)

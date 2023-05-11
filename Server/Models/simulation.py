@@ -21,10 +21,14 @@ class Simulation:
             "date": self.date,
             "company": self.description,
             "problem": self.problem,
-            "score": "",
+            "score": self.score,
             "recording": "",
             "owner": self.owner,
             "status": "error"
         }
         return str
+
+    def update_sim_finish(self,recording):
+        self.recording = recording
+        self.status = "completed"
 

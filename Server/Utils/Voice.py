@@ -1,6 +1,7 @@
 import json
-from Server.Server import load_config_file
 import azure.cognitiveservices.speech as speechsdk
+
+from Server.Server import load_config_file
 
 
 class Voice:

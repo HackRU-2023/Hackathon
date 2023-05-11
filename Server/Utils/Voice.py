@@ -1,7 +1,7 @@
 import json
 import azure.cognitiveservices.speech as speechsdk
 
-from Server.Server import load_config_file
+from Server.FlaskServer import load_config_file
 
 
 class Voice:
@@ -61,12 +61,12 @@ class Voice:
                 print("Did you set the speech resource key and region values?")
 
 
-config = load_config_file(r"C:\Users\yuval\OneDrive\Desktop\Hackton\Hackaton\Server\configuration.json")
-
-# Example usage
-voice = Voice(config)
-
-text1 = "Don't speak like that"
-voice.generate_emotional_speech(text1, "en-US-AIGenerate1Neural", filename="outputFix.wav")
-
-voice.recognize_from_microphone_or_audio_file(audio_file_path="outputFix.wav")
+# config = load_config_file(r"C:\Users\yuval\OneDrive\Desktop\Hackton\Hackaton\Server\configuration.json")
+#
+# # Example usage
+# voice = Voice(config)
+#
+# text1 = "Don't speak like that"
+# voice.generate_emotional_speech(text1, "en-US-AIGenerate1Neural", filename="outputFix.wav")
+#
+# voice.recognize_from_microphone_or_audio_file(audio_file_path="outputFix.wav")

@@ -2,9 +2,6 @@ import json
 import azure.cognitiveservices.speech as speechsdk
 
 
-# from Server.FlaskServer import load_config_file
-
-
 class Voice:
     def __init__(self, config):
         # Access the configuration options
@@ -60,3 +57,4 @@ class Voice:
             if cancellation_details.reason == speechsdk.CancellationReason.Error:
                 print("Error details: {}".format(cancellation_details.error_details))
                 print("Did you set the speech resource key and region values?")
+

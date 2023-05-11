@@ -1,7 +1,8 @@
 import json
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 
+from Server.Simulator.OpenAISimulator import OpenAISimulator
 from Server.Utils.Voice import Voice
 
 app = Flask(__name__)
@@ -32,19 +33,40 @@ def post_transcription():
     # Retrieve the string from the client request
     string_from_client = request.json.get('string')
     # Perform any necessary operations or retrieve data from a database
-    data = {'transcription': string_from_client}
-    return data
+
+    #################################
+    if string_from_client == "review":
+        result = simulator.review_simulation(simulation_id)
+        return result
+    else:
+        result, emotion = simulator.generate_answer(simulation_id, string_from_client)
+        if emotion not in emotions_models:
+            emotion = "NATURAL"
+        voice.generate_emotional_speech(result, emotions_models[emotion], "audio/curr_speech_file.wav")
+
+    print(result)
+    return send_file("audio/curr_speech_file.wav", mimetype='audio/mp3')
+    ############################
 
 
 if __name__ == '__main__':
     config = load_config_file("configuration.json")
     voice_config = load_config_file("Utils/config_voice.json")
+    emotions_models = voice_config["emotions_models"]
     voice_model = voice_config["emotions_models"]["Nervous"]
 
+    ########################################################
+    simulator = OpenAISimulator()
+    simulation_id = simulator.start_simulation('A company that provide internet', "Angry, disappointed",
+                                               "Young man usually friendly",
+                                               "He paying for 100mb internet but only get 5mb after internet check")
+
+    #########################################################
     # Example usage
 
     voice = Voice(config)
-    text1 = ".Don't speak like that"
-    voice.generate_emotional_speech(text1, voice_model)  # , filename="outputFix.wav")
+
+    # text1 = ".Don't speak like that"
+    # voice.generate_emotional_speech(text1, voice_model)  # , filename="outputFix.wav")
     # voice.recognize_from_microphone_or_audio_file(audio_file_path="outputFix.wav")
-    # app.run(debug=True)
+    app.run(debug=True)

@@ -1,0 +1,33 @@
+# Virtual environment
+venv/
+
+# Byte-compiled files
+*.pyc
+__pycache__/
+
+# Logs
+*.log
+
+# Flask
+instance/
+
+# JSON files
+*.json
+
+# Media files
+*.mp4
+*.wav
+*.mp3
+
+# Ignore local development configuration
+config.py
+
+# Ignore IDE-specific files and directories
+.idea/
+.vscode/
+
+# Ignore environment-specific files
+.env
+
+# Ignore package installation files
+pip-lock.txt

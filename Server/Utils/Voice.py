@@ -1,76 +1,71 @@
-from gtts import gTTS
-import os
-import speech_recognition as sr
-import os
-from pydub import AudioSegment
-from pydub.silence import split_on_silence
+import json
+from Server.Server import load_config_file
+import azure.cognitiveservices.speech as speechsdk
+
 
 class Voice:
-    def convert_text_to_speech(self, text, language='en', slow=False, filename='output.mp3'):
-        # Create gTTS object
-        tts = gTTS(text=text, lang=language, slow=slow)
+    def __init__(self, config):
+        # Access the configuration options
+        self.speech_key = config['SPEECH_KEY']
+        self.speech_region = config['SPEECH_REGION']
 
-        # Save the audio file
-        tts.save(filename)
+    def generate_emotional_speech(self, text, speech_synthesis_voice_name, filename=None):
+        # This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
+        speech_config = speechsdk.SpeechConfig(subscription=self.speech_key, region=self.speech_region)
 
-        # Play the audio file
-        os.system(filename)
+        if filename is None:
+            audio_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=True)
+        else:
+            audio_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=True, filename=filename)
 
-    def transcribe_audio(self, path):
-        # Create a speech recognition object
-        r = sr.Recognizer()
+        # The language of the voice that speaks.
+        speech_config.speech_synthesis_voice_name = speech_synthesis_voice_name
+        speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
-        # Use the audio file as the audio source
-        with sr.AudioFile(path) as source:
-            audio_listened = r.record(source)
-            # Try converting it to text
-            text = r.recognize_google(audio_listened)
-        return text
+        speech_synthesis_result = speech_synthesizer.speak_text_async(text).get()
 
-    def get_large_audio_transcription_on_silence(self, path):
-        """Splitting the large audio file into chunks and apply speech recognition on each of these chunks"""
-        # Open the audio file using pydub
-        sound = AudioSegment.from_file(path)
-        # Split audio sound where silence is 500 milliseconds or more and get chunks
-        chunks = split_on_silence(sound,
-                                  # Experiment with this value for your target audio file
-                                  min_silence_len=500,
-                                  # Adjust this per requirement
-                                  silence_thresh=sound.dBFS - 14,
-                                  # Keep the silence for 1 second, adjustable as well
-                                  keep_silence=500,
-                                  )
-        folder_name = "audio-chunks"
-        # Create a directory to store the audio chunks
-        if not os.path.isdir(folder_name):
-            os.mkdir(folder_name)
-        whole_text = ""
-        # Process each chunk
-        for i, audio_chunk in enumerate(chunks, start=1):
-            # Export audio chunk and save it in the `folder_name` directory.
-            chunk_filename = os.path.join(folder_name, f"chunk{i}.wav")
-            audio_chunk.export(chunk_filename, format="wav")
-            # Recognize the chunk
-            try:
-                text = self.transcribe_audio(chunk_filename)
-            except sr.UnknownValueError as e:
-                print("Error:", str(e))
-            else:
-                text = f"{text.capitalize()}. "
-                print(chunk_filename, ":", text)
-                whole_text += text
-        # Return the text for all chunks detected
-        return whole_text
+        if speech_synthesis_result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
+            print("Speech synthesized for text [{}]".format(text))
+        elif speech_synthesis_result.reason == speechsdk.ResultReason.Canceled:
+            cancellation_details = speech_synthesis_result.cancellation_details
+            print("Speech synthesis canceled: {}".format(cancellation_details.reason))
+            if cancellation_details.reason == speechsdk.CancellationReason.Error:
+                if cancellation_details.error_details:
+                    print("Error details: {}".format(cancellation_details.error_details))
+                    print("Did you set the speech resource key and region values?")
 
+    def recognize_from_microphone_or_audio_file(self, audio_file_path=None):
+        # This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
+        speech_config = speechsdk.SpeechConfig(subscription=self.speech_key, region=self.speech_region)
+        speech_config.speech_recognition_language = "en-US"
+        if audio_file_path is not None:
+            audio_config = speechsdk.audio.AudioConfig(use_default_microphone=False, filename=audio_file_path)
+        else:
+            audio_config = speechsdk.audio.AudioConfig(use_default_microphone=True)
+
+        speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+
+        # print("Speak into your microphone.")
+        speech_recognition_result = speech_recognizer.recognize_once_async().get()
+
+        if speech_recognition_result.reason == speechsdk.ResultReason.RecognizedSpeech:
+            print("Recognized: {}".format(speech_recognition_result.text))
+        elif speech_recognition_result.reason == speechsdk.ResultReason.NoMatch:
+            print("No speech could be recognized: {}".format(speech_recognition_result.no_match_details))
+        elif speech_recognition_result.reason == speechsdk.ResultReason.Canceled:
+            cancellation_details = speech_recognition_result.cancellation_details
+            print("Speech Recognition canceled: {}".format(cancellation_details.reason))
+            if cancellation_details.reason == speechsdk.CancellationReason.Error:
+                print("Error details: {}".format(cancellation_details.error_details))
+                print("Did you set the speech resource key and region values?")
+
+
+config = load_config_file(r"C:\Users\yuval\OneDrive\Desktop\Hackton\Hackaton\Server\configuration.json")
 
 # Example usage
-voice = Voice()
+voice = Voice(config)
 
-# Code 1
 text1 = "Don't speak like that"
-voice.convert_text_to_speech(text1, language='en', slow=False, filename='welcome1.mp3')
+voice.generate_emotional_speech(text1, "en-US-AIGenerate1Neural", filename="outputFix.wav")
 
-# Code 2
-filename = "LISTEN to Your SECRET VOICE.wav"
-text2 = voice.transcribe_audio(filename)
-print(text2)
+voice.recognize_from_microphone_or_audio_file(audio_file_path="outputFix.wav")

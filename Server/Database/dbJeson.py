@@ -79,15 +79,17 @@ simulation4 = {
     }
 
 client_skills = {
-    "personal": ["empathy", "patience","fast talk","stuttering speech","loud voice","weak voice","monotonous speech","rude", "stingy", "gentle", "assertive", "manipulative"]
+    "personal": ["empathy", "patience","fast talk","stuttering speech","loud voice","weak voice",
+                 "monotonous speech","rude", "stingy", "gentle", "assertive", "manipulative"],
+    "emotion": ["CALM","ANGRY","HAPPY","SURPRISED","HOPEFUL","CONFUSED","DISAPPOINTED","NATURAL"]
 }
 agent_skills ={
     "skills": ["listening","patience","empathy","professional","emotional management","coping with stressful situations","expressiveness"]
 }
 
 template_simulation1 = {
-    "subject" : "Angry client",
-    "skills" : {
+    "subject": "Angry client",
+    "personal": {
         "empathy": 2,
         "patience": 3,
         "fast talk": 5,
@@ -99,11 +101,12 @@ template_simulation1 = {
         "gentle": 1,
         "assertive": 5,
         "manipulative": 2
-    }
+    },
+    "emotion": ["CALM","ANGRY","HAPPY","SURPRISED","HOPEFUL","CONFUSED","DISAPPOINTED","NATURAL"]
 }
 template_simulation2 = {
     "subject" : "Usual client",
-    "skills" : {
+    "personal" : {
         "empathy": 5,
         "patience": 3,
         "fast talk": 1,

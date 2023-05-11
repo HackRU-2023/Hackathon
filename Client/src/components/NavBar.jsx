@@ -9,7 +9,7 @@ import NavHeaders from "./NavHeaders";
 const NavBar = () => {
   const { user } = useUser();
   const registeredUserNavLinks = [
-    { name: "Simulation", path: "/simulation" },
+    { name: "Simulation", path: "/simulator" },
     // { name: "Shop", path: "/shop" },
     // { name: "Chart", path: "/chart" },
   ];

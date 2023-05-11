@@ -14,7 +14,8 @@ def home():
 def get_data():
     # Perform any necessary operations or retrieve data from a database
     data = {'data': [1, 2, 3, 4, 5]}
-    return jsonify(data)
+    # return jsonify(data)
+    print("got it")
 
 
 if __name__ == '__main__':

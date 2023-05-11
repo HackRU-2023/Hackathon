@@ -19,11 +19,6 @@ const NavBar = () => {
   ];
   const registeredDropDownLinks = [
     { name: "My Profile", path: "/profile" },
-    { name: "Basic Info", path: "/info" },
-    { name: "Team Info", path: "/team" },
-    { name: "Friends", path: "/friends" },
-    { name: "Statistics", path: "/statistics" },
-    { name: "Achievements", path: "/achievements" },
     { name: "Settings", path: "/settings" },
   ];
   const unRegisteredDropDownLinks = [{ name: "Settings", path: "/settings" }];

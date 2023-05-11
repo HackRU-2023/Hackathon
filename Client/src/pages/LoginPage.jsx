@@ -60,7 +60,7 @@ function LoginPage() {
         >
           <div className="text-center flex mb-3">
             <h1 className="text-2xl text-gray-50 font-semibold mx-auto">
-              Sign in to TradingTournament
+              Sign in to Simulate!
             </h1>
           </div>
 
@@ -124,15 +124,6 @@ function LoginPage() {
             <div className="flex space-x-8">
               <GoogleLogin />
             </div>
-          </div>
-          <div className="flex flex-col items-center justify-center md:flex-row md:justify-center md:items-center space-y-4 md:space-x-4 md:space-y-0 mt-4 border-2 border-gray-600 rounded-md py-4">
-            <h2 className="text-gray-50 ">New To TT?</h2>
-            <Link
-              className="text-blue-500  rounded focus:outline-none focus:shadow-outline"
-              to="/register"
-            >
-              Create an account.
-            </Link>
           </div>
 
           <div className=" mt-2"></div>

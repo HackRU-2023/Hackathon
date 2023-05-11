@@ -83,7 +83,7 @@ const DropDown = ({ dropDownLinks, navBarLinks, user }) => {
             ))}
             {user ? (
               <button
-                className="text-gray-50 w-full border-t-2 hover:bg-red-400 hover:text-black px-3  py-6 sm:py-2 font-medium md:flex md:items-center md:px-4 md:text-base text-center"
+                className="flex justify-center text-gray-50 w-full border-t-2 hover:bg-red-400 hover:text-black px-3  py-6 sm:py-2 font-medium md:flex md:items-center md:px-4 md:text-base text-center"
                 onClick={() => {
                   handleLogOut(navigate);
                 }}

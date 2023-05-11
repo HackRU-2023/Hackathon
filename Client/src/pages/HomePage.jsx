@@ -19,7 +19,7 @@ const HomePage = () => {
           team with our interactive simulator!
         </p>
         <Link
-          to={user ? "/simulation" : "/login"}
+          to={user ? "/simulator" : "/login"}
           className="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-3 px-24 rounded-full text-lg sm:text-xl md:text-2xl"
         >
           Get Started

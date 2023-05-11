@@ -4,6 +4,7 @@ const EditSimulation = ({
   mainSimulationConfig,
   editSimulation,
   setShowEditSimulation,
+  setView,
 }) => {
   const skills = [
     "empathy",
@@ -30,6 +31,10 @@ const EditSimulation = ({
     editSimulation(simulationConfig);
     setShowEditSimulation(false);
     console.log(simulationConfig);
+  };
+  const startHandler = () => {
+    editSimulation(simulationConfig);
+    setView("simulator");
   };
   return (
     <div className="p-4 bg-white rounded-md shadow-lg">
@@ -60,12 +65,20 @@ const EditSimulation = ({
           </li>
         ))}
       </ul>
-      <button
-        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md"
-        onClick={saveHandler}
-      >
-        Save Configuration
-      </button>
+      <div className="flex mt-4 px-4 py-2">
+        <button
+          className=" bg-blue-600 text-white  rounded-md"
+          onClick={saveHandler}
+        >
+          Save Configuration
+        </button>
+        <button
+          className=" bg-blue-600 text-white  rounded-md"
+          onClick={startHandler}
+        >
+          Start With Configuration
+        </button>
+      </div>
     </div>
   );
 };

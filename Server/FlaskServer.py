@@ -65,10 +65,9 @@ def get_skills_to_fill():
 @app.route('/api/skills_template', methods=['GET'])
 def get_skills_template():
     # Perform any necessary operations or retrieve data from a database
-    skills = db.set_template_sim()
+    skills = db.get_template_sim()
     # Convert ObjectId to string
     skills = json.loads(json_util.dumps(skills))
-
     return jsonify(skills)
 
 

@@ -70,7 +70,10 @@ def get_skills_template():
     skills = json.loads(json_util.dumps(skills))
     return jsonify(skills)
 
-
+@app.route('/api/get_review', methods=['GET'])
+def get_review():
+    result = simulator.review_simulation(simulation_id)
+    return jsonify(result)
 
 @app.route('/api/transcription_exchange', methods=['POST'])
 def post_transcription():
@@ -79,15 +82,15 @@ def post_transcription():
     # Perform any necessary operations or retrieve data from a database
 
     #################################
-    if string_from_client == "review":
-        result = simulator.review_simulation(simulation_id)
-        return result
-    else:
-        result, emotion = simulator.generate_answer(simulation_id, string_from_client)
-        if emotion not in emotions_models:
-            emotion = "NATURAL"
+    # if string_from_client == "review":
+    #     result = simulator.review_simulation(simulation_id)
+    #     return result
+    # else:
+    result, emotion = simulator.generate_answer(simulation_id, string_from_client)
+    if emotion not in emotions_models:
+        emotion = "NATURAL"
 
-        voice.generate_emotional_speech(result, emotions_models[emotion], "audio/curr_speech_file.wav")
+    voice.generate_emotional_speech(result, emotions_models[emotion], "audio/curr_speech_file.wav")
     print(result)
     return send_file("audio/curr_speech_file.wav", mimetype='audio/x-wav')
     ############################
@@ -99,7 +102,7 @@ def get_company_description():
     emotions = request.json.get('emotions')
     personality = request.json.get('personality')
     situation_description = request.json.get('situation_description')
-    simulation_id = simulator.start_simulation(config["A company that provide internet"], emotions,
+    simulation_id = simulator.start_simulation(config["CompanyInfo"], emotions,
                                                personality,
                                                situation_description)
 

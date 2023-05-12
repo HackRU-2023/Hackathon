@@ -1,7 +1,7 @@
 import json
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
-
+from Utils import InitUtil as IU
 from Server.Database.connection import InitMongo
 from Server.Database.dataBase import DataBase
 from Server.Simulator.OpenAISimulator import OpenAISimulator
@@ -10,6 +10,12 @@ from Server.Utils.Voice import Voice
 app = Flask(__name__)
 CORS(app)
 
+def get_client_agent_strongs(db):
+    agent_skills = db.get_agent(agent=2736)["skills"]
+    client_skills = db.get_client_skills()
+    client_personals = client_skills["personal"]
+    client_emotions = client_skills["emotion"]
+    return agent_skills, client_personals, client_emotions
 
 def load_config_file(config_path):
     # Load the configuration from the JSON file
@@ -47,6 +53,11 @@ def get_skills_to_fill():
     skills = db.get_client_skills()
     return jsonify(skills)
 
+@app.route('/api/get_agent', methods=['GET'])
+def get_skills_to_fill():
+    agent_id = request.json.get('agent_id')
+    agent = db.get_agent(agent_id)
+    return jsonify(agent)
 
 @app.route('/api/skills_template', methods=['GET'])
 def get_skills_template():
@@ -106,5 +117,5 @@ if __name__ == '__main__':
     simulation_id = None
 
     voice = Voice(local_config)
-
+    res = IU.InitUtil.matching_customer(simulator.model_engine,db)
     app.run(debug=True)

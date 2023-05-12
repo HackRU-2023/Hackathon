@@ -16,6 +16,11 @@ class Agent:
 
     def update_skills(self, skill_array):
         i = 0
+        old_sum_Simulation = len(self.simulation)
+        new_sum_Simulation = old_sum_Simulation+1
+        wightOld = old_sum_Simulation / new_sum_Simulation
+        wightNew = 1/new_sum_Simulation
         for key,value in self.skills.items():
-            self.skills[key] = str(skill_array[i])
+            rank = (wightOld*int(self.skills[key])) + ((wightNew)*skill_array[i])
+            self.skills[key] = str(int(rank)+1)
             i += 1

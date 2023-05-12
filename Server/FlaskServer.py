@@ -3,6 +3,7 @@ import json
 from bson import json_util
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
+from Utils import InitUtil as IU
 from bson import json_util
 
 
@@ -16,6 +17,12 @@ from Server.Utils.Voice import Voice
 app = Flask(__name__)
 CORS(app)
 
+def get_client_agent_strongs(db):
+    agent_skills = db.get_agent(agent=2736)["skills"]
+    client_skills = db.get_client_skills()
+    client_personals = client_skills["personal"]
+    client_emotions = client_skills["emotion"]
+    return agent_skills, client_personals, client_emotions
 
 def load_config_file(config_path):
     # Load the configuration from the JSON file
@@ -31,21 +38,7 @@ def home():
 # @app.route('/api/users/<id>', methods=['GET'])
 # def login(id):
 
-@app.route('/api/login', methods=['GET'])
-def login():
-    agent = {
 
-        "id": id
-    }
-    # Perform any necessary operations or retrieve data from a database
-<<<<<<< HEAD
-    agent_details = db.get_agent(agent)
-    return jsonify(agent_details)
-=======
-    agent_login = db.get_agent(agent)
-    return jsonify(agent_login)
-
->>>>>>> 40c25b4137b302532827dfa4a18dfe1e8a8a1695
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
@@ -63,17 +56,24 @@ def get_skills_to_fill():
 
     return jsonify(skills)
 
+@app.route('/api/get_agent', methods=['GET'])
+def get_skills_to_fill():
+    agent_id = request.json.get('agent_id')
+    agent = db.get_agent(agent_id)
+    return jsonify(agent)
 
 @app.route('/api/skills_template', methods=['GET'])
 def get_skills_template():
     # Perform any necessary operations or retrieve data from a database
-    skills = db.set_template_sim()
+    skills = db.get_template_sim()
     # Convert ObjectId to string
     skills = json.loads(json_util.dumps(skills))
-
     return jsonify(skills)
 
-
+@app.route('/api/get_review', methods=['GET'])
+def get_review():
+    result = simulator.review_simulation(simulation_id)
+    return jsonify(result)
 
 @app.route('/api/transcription_exchange', methods=['POST'])
 def post_transcription():
@@ -82,15 +82,15 @@ def post_transcription():
     # Perform any necessary operations or retrieve data from a database
 
     #################################
-    if string_from_client == "review":
-        result = simulator.review_simulation(simulation_id)
-        return result
-    else:
-        result, emotion = simulator.generate_answer(simulation_id, string_from_client)
-        if emotion not in emotions_models:
-            emotion = "NATURAL"
+    # if string_from_client == "review":
+    #     result = simulator.review_simulation(simulation_id)
+    #     return result
+    # else:
+    result, emotion = simulator.generate_answer(simulation_id, string_from_client)
+    if emotion not in emotions_models:
+        emotion = "NATURAL"
 
-        voice.generate_emotional_speech(result, emotions_models[emotion], "audio/curr_speech_file.wav")
+    voice.generate_emotional_speech(result, emotions_models[emotion], "audio/curr_speech_file.wav")
     print(result)
     return send_file("audio/curr_speech_file.wav", mimetype='audio/x-wav')
     ############################
@@ -102,7 +102,7 @@ def get_company_description():
     emotions = request.json.get('emotions')
     personality = request.json.get('personality')
     situation_description = request.json.get('situation_description')
-    simulation_id = simulator.start_simulation(config["A company that provide internet"], emotions,
+    simulation_id = simulator.start_simulation(config["CompanyInfo"], emotions,
                                                personality,
                                                situation_description)
 
@@ -120,5 +120,5 @@ if __name__ == '__main__':
     simulation_id = None
 
     voice = Voice(local_config)
-
+    res = IU.InitUtil.matching_customer(simulator.model_engine,db)
     app.run(debug=True)

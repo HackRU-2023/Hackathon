@@ -1,4 +1,6 @@
 import json
+
+from bson import json_util
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 
@@ -45,20 +47,26 @@ def get_data():
 def get_skills_to_fill():
     # Perform any necessary operations or retrieve data from a database
     skills = db.get_client_skills()
+    # Convert ObjectId to string
+    skills = json.loads(json_util.dumps(skills))
+
     return jsonify(skills)
 
 
 @app.route('/api/skills_template', methods=['GET'])
 def get_skills_template():
     # Perform any necessary operations or retrieve data from a database
-    skills = db.get_client_skills()
+    skills = db.set_template_sim()
+    # Convert ObjectId to string
+    skills = json.loads(json_util.dumps(skills))
+
     return jsonify(skills)
 
 
 @app.route('/api/skills_agent_template', methods=['GET'])
 def get_skills_agent_template():
     # Perform any necessary operations or retrieve data from a database
-    skills = db.get_client_skills()
+    
     return jsonify(skills)
 
 

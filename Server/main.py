@@ -13,8 +13,8 @@ simulation_id = simulator.start_simulation('A company that provide internet', "A
 answer = simulator.generate_answer(simulation_id, "Hello, how can i help")
 print(answer)
 
-config = load_config_file(r"C:\Hackaton\Server\configuration.json")
-voice = Voice(config)
+local_config = load_local_config_file(r"C:\Hackaton\Server\local_conf.json")
+voice = Voice(local_config)
 bt = 0
 sum = 0
 

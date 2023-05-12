@@ -2,7 +2,6 @@ import json
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 
-
 from Server.Database.connection import InitMongo
 from Server.Database.dataBase import DataBase
 from Server.Simulator.OpenAISimulator import OpenAISimulator
@@ -84,25 +83,28 @@ def post_transcription():
     ############################
 
 
+# company_description, emotions, personality, call_subject
+@app.route('/api/situation_description', methods=['POST'])
+def get_company_description():
+    emotions = request.json.get('emotions')
+    personality = request.json.get('personality')
+    situation_description = request.json.get('situation_description')
+    simulation_id = simulator.start_simulation(config["A company that provide internet"], emotions,
+                                               personality,
+                                               situation_description)
+
+
 if __name__ == '__main__':
     db_connection = InitMongo()
     db = DataBase(db_connection)
     config = load_config_file("configuration.json")
+    local_config = load_config_file("local_conf.json")
     voice_config = load_config_file("Utils/config_voice.json")
     emotions_models = voice_config["emotions_models"]
 
-    ########################################################
     simulator = OpenAISimulator()
-    simulation_id = simulator.start_simulation('A company that provide internet', "Angry, disappointed",
-                                               "Young man usually friendly",
-                                               "He paying for 100mb internet but only get 5mb after internet check")
+    simulation_id = None
 
-    #########################################################
-    # Example usage
+    voice = Voice(local_config)
 
-    voice = Voice(config)
-
-    # text1 = ".Don't speak like that"
-    # voice.generate_emotional_speech(text1, voice_model)  # , filename="outputFix.wav")
-    # voice.recognize_from_microphone_or_audio_file(audio_file_path="outputFix.wav")
     app.run(debug=True)

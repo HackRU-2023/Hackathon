@@ -1,7 +1,14 @@
 import json
+
+from bson import json_util
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from Utils import InitUtil as IU
+from bson import json_util
+
+
+
+
 from Server.Database.connection import InitMongo
 from Server.Database.dataBase import DataBase
 from Server.Simulator.OpenAISimulator import OpenAISimulator
@@ -28,16 +35,9 @@ def load_config_file(config_path):
 def home():
     return jsonify({'message': 'Hello from Flask server!'})
 
+# @app.route('/api/users/<id>', methods=['GET'])
+# def login(id):
 
-@app.route('/api/login', methods=['GET'])
-def login():
-    agent = {
-        "user_name": "intSer",
-        "password": "123456",
-    }
-    # Perform any necessary operations or retrieve data from a database
-    agent_login = db.get_agent(agent)
-    return jsonify(agent_login)
 
 
 @app.route('/api/data', methods=['GET'])
@@ -51,6 +51,9 @@ def get_data():
 def get_skills_to_fill():
     # Perform any necessary operations or retrieve data from a database
     skills = db.get_client_skills()
+    # Convert ObjectId to string
+    skills = json.loads(json_util.dumps(skills))
+
     return jsonify(skills)
 
 @app.route('/api/get_agent', methods=['GET'])
@@ -62,15 +65,12 @@ def get_skills_to_fill():
 @app.route('/api/skills_template', methods=['GET'])
 def get_skills_template():
     # Perform any necessary operations or retrieve data from a database
-    skills = db.get_client_skills()
+    skills = db.set_template_sim()
+    # Convert ObjectId to string
+    skills = json.loads(json_util.dumps(skills))
+
     return jsonify(skills)
 
-
-@app.route('/api/skills_agent_template', methods=['GET'])
-def get_skills_agent_template():
-    # Perform any necessary operations or retrieve data from a database
-    skills = db.get_client_skills()
-    return jsonify(skills)
 
 
 @app.route('/api/transcription_exchange', methods=['POST'])
@@ -106,6 +106,7 @@ def get_company_description():
 
 
 if __name__ == '__main__':
+
     db_connection = InitMongo()
     db = DataBase(db_connection)
     config = load_config_file("configuration.json")

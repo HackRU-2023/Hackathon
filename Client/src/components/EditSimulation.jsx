@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const EditSimulation = ({
   mainSimulationConfig,
@@ -6,26 +7,27 @@ const EditSimulation = ({
   setShowEditSimulation,
   setView,
 }) => {
-  const skills = [
-    "empathy",
-    "patience",
-    "product knowledge",
-    "problem solving",
-    "time-management",
-    "multi-tasking",
-    "active listening",
-    "conflict resolution",
-    "non-verbal communication",
-    "verbal communication",
-    "emotional intelligence",
-  ];
-  const [simulationConfig, setSimulationConfig] = useState(
-    mainSimulationConfig ||
-      skills.reduce((acc, skill) => {
-        acc[skill] = 0;
-        return acc;
-      }, {})
-  );
+  const [skills, setSkills] = useState([]);
+  const [emotions, setEmotions] = useState([]);
+  const [simulationConfig, setSimulationConfig] = useState({});
+  const [selectedEmotion, setSelectedEmotion] = useState("");
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      const response = await axios.get("/api/skills_fill");
+      const skillsArray = Object.values(response.data.personal);
+      const emotionsArray = Object.values(response.data.emotion);
+      setSkills(skillsArray);
+      setEmotions(emotionsArray);
+      setSimulationConfig(
+        skillsArray.reduce((acc, skill) => {
+          acc[skill] = 0;
+          return acc;
+        }, {})
+      );
+    };
+    fetchSkills();
+  }, []);
 
   const saveHandler = () => {
     editSimulation(simulationConfig);
@@ -36,6 +38,11 @@ const EditSimulation = ({
     editSimulation(simulationConfig);
     setView("simulator");
   };
+
+  const handleEmotionChange = (event) => {
+    setSelectedEmotion(event.target.value);
+  };
+
   return (
     <div className="p-4 bg-white rounded-md shadow-lg">
       <h3 className="text-xl font-semibold mb-4">
@@ -65,15 +72,33 @@ const EditSimulation = ({
           </li>
         ))}
       </ul>
-      <div className="flex mt-4 px-4 py-2">
+      <div className="mt-4">
+        <h4 className="mb-2">Select Emotion:</h4>
+        {emotions.map((emotion, index) => (
+          <div key={index}>
+            <input
+              type="radio"
+              id={`emotion-${index}`}
+              name="emotion"
+              value={emotion}
+              checked={selectedEmotion === emotion}
+              onChange={handleEmotionChange}
+            />
+            <label htmlFor={`emotion-${index}`} className="ml-2">
+              {emotion}
+            </label>
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-center items-center mt-4 space-x-4">
         <button
-          className=" bg-blue-600 text-white  rounded-md"
+          className="bg-blue-600 hover:bg-blue-700 text-white rounded-md mr-4 p-3"
           onClick={saveHandler}
         >
           Save Configuration
         </button>
         <button
-          className=" bg-blue-600 text-white  rounded-md"
+          className="bg-blue-600 hover:bg-blue-700 text-white rounded-md ml-4 p-3"
           onClick={startHandler}
         >
           Start With Configuration

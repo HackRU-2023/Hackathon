@@ -1,6 +1,6 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-#from dbJeson import *
+
 
 URI = "mongodb+srv://hackRuG36:th123456@cluster0.cooaizb.mongodb.net/?retryWrites=true&w=majority"
 

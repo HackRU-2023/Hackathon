@@ -6,7 +6,7 @@ import useUser from "../hooks/useUser";
 import EditSimulation from "../components/editSimulation";
 import PickSimulation from "../components/PickSimulation";
 import Simulator from "../components/Simulator";
-
+import Results from "../components/Results";
 const SimulatorMenu = () => {
   const [simulations, setSimulations] = useState([]);
   const { user } = useUser();
@@ -15,7 +15,7 @@ const SimulatorMenu = () => {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [showTemplateSimulations, setShowTemplateSimulations] = useState();
   const [view, setView] = useState("menu");
-
+  const [results, setResults] = useState(null);
   const handleTemplateSelect = (template) => {
     setSelectedTemplate(template);
   };
@@ -57,16 +57,7 @@ const SimulatorMenu = () => {
                   setView={setView}
                 />
               )}
-              {!showEditSimulation && (
-                <div className="flex border-l-2 border-b-2 border-r-2 border-green-600 w-full rounded-b-md ">
-                  <button className="flex bg-green-300 justify-center w-full py-2 px-4 hover:bg-green-800  ">
-                    <span className="text-black font-semibold mr-2 ">
-                      Create New Simulation
-                    </span>
-                    <AiOutlinePlus className="text-black  text-2xl cursor-pointer" />
-                  </button>
-                </div>
-              )}
+
               <div className="flex justify-center border-t-2 border-gray w-full mt-4">
                 <span className="my-4 text-xl">Or</span>
               </div>
@@ -94,6 +85,8 @@ const SimulatorMenu = () => {
             simulatorConfig={simulationConfig}
           />
         );
+      case "results":
+        return <Results results={results} />;
       default:
         return null;
     }

@@ -12,25 +12,24 @@ class DataBase:
         db_connection = db_connection
         self.mydb = db_connection._client["HackRu"]
 
-    def get_login(self, agent):
+    def get_login(self, id):
         user_name = ""
         password = ""
         position = ""
         skills = ""
         simulation = ""
-        user_name = agent['user_name']
-        password = agent['password']
         mycol = self.mydb["agents"]
-        myquery = {"user_name": user_name, "password": password}
+        myquery = {"id": id}
         mydoc = mycol.find(myquery)
-        for key in mydoc:
-            id = key['id']
-            position = key['position']
-            skills = key['skills']
-            simulation = key['simulation']
-        agent = Agent(user_name, password,id,position,skills,simulation)
-        jsonStr = json.dumps(agent.__dict__)
-        return jsonStr
+        # for key in mydoc:
+        #     user_name = key['user_name']
+        #     password = key['password']
+        #     position = key['position']
+        #     skills = key['skills']
+        #     simulation = key['simulation']
+        # agent = Agent(user_name, password, id, position, skills, simulation)
+        # jsonStr = json.dumps(agent.__dict__)
+        return mydoc
 
     def get_agent(self, id):
         user_name = ""
@@ -55,6 +54,17 @@ class DataBase:
         mycol = self.mydb["clientSkills"]
         mydoc = mycol.find()
         return mydoc
+
+    def get_client_skills_yuval(self):
+        mycol = self.mydb["clientSkills"]
+        mydoc = mycol.find()
+        client_skills = []
+        for x in mydoc:
+            personal = x['personal']
+            em = x['emotion']
+        client_skills.append(personal)
+        client_skills.append(em)
+        return client_skills
 
     def get_template_sim(self):
         mycol = self.mydb["templateSimulation"]

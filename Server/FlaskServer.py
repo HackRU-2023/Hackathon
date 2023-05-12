@@ -18,10 +18,12 @@ app = Flask(__name__)
 CORS(app)
 
 def get_client_agent_strongs(db):
-    agent_skills = db.get_agent(agent=2736)["skills"]
-    client_skills = db.get_client_skills()
-    client_personals = client_skills["personal"]
-    client_emotions = client_skills["emotion"]
+    agent = db.get_agent("NglT4UH7dzTYD6EEmW64NvzKQZ82")
+    agent_skills = agent.skills
+    client_skills = db.get_client_skills_yuval()
+
+    client_personals = client_skills[0]
+    client_emotions = client_skills[1]
     return agent_skills, client_personals, client_emotions
 
 def load_config_file(config_path):
@@ -57,9 +59,10 @@ def get_skills_to_fill():
     return jsonify(skills)
 
 @app.route('/api/get_agent', methods=['GET'])
-def get_skills_to_fill():
+def get_agent():
     agent_id = request.json.get('agent_id')
-    agent = db.get_agent(agent_id)
+    agent = db.get_login(agent_id)
+    agent = json.loads(json_util.dumps(agent))
     return jsonify(agent)
 
 @app.route('/api/skills_template', methods=['GET'])
@@ -120,5 +123,6 @@ if __name__ == '__main__':
     simulation_id = None
 
     voice = Voice(local_config)
-    res = IU.InitUtil.matching_customer(simulator.model_engine,db)
+    res = IU.InitUtil.matching_customer(simulator.model_engine, db)
+    print(res)
     app.run(debug=True)

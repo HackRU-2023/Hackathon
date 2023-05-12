@@ -3,7 +3,7 @@ import json
 from bson import json_util
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
-from Utils import InitUtil as IU
+#from Utils import InitUtil as IU
 from bson import json_util
 
 
@@ -56,11 +56,11 @@ def get_skills_to_fill():
 
     return jsonify(skills)
 
-@app.route('/api/get_agent', methods=['GET'])
-def get_skills_to_fill():
-    agent_id = request.json.get('agent_id')
-    agent = db.get_agent(agent_id)
-    return jsonify(agent)
+# @app.route('/api/get_agent', methods=['GET'])
+# def get_skills_to_fill():
+#     agent_id = request.json.get('agent_id')
+#     agent = db.get_agent(agent_id)
+#     return jsonify(agent)
 
 @app.route('/api/skills_template', methods=['GET'])
 def get_skills_template():
@@ -120,5 +120,5 @@ if __name__ == '__main__':
     simulation_id = None
 
     voice = Voice(local_config)
-    res = IU.InitUtil.matching_customer(simulator.model_engine,db)
+    #res = IU.InitUtil.matching_customer(simulator.model_engine,db)
     app.run(debug=True)

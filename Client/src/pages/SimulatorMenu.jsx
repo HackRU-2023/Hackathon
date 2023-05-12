@@ -71,7 +71,11 @@ const SimulatorMenu = () => {
                   </button>
                 </div>
               ) : (
-                <PickSimulation onSelect={setSelectedTemplate} />
+                <PickSimulation
+                  onSelect={setSelectedTemplate}
+                  setSimulationConfig={setSimulationConfig}
+                  setView={setView}
+                />
               )}
             </div>
           </>

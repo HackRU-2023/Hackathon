@@ -63,12 +63,6 @@ def get_skills_template():
     return jsonify(skills)
 
 
-@app.route('/api/skills_agent_template', methods=['GET'])
-def get_skills_agent_template():
-    # Perform any necessary operations or retrieve data from a database
-    
-    return jsonify(skills)
-
 
 @app.route('/api/transcription_exchange', methods=['POST'])
 def post_transcription():

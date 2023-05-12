@@ -1,6 +1,10 @@
 import json
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
+from bson import json_util
+
+
+
 
 
 from Server.Database.connection import InitMongo
@@ -23,15 +27,16 @@ def load_config_file(config_path):
 def home():
     return jsonify({'message': 'Hello from Flask server!'})
 
-@app.route('/api/login', methods=['GET'])
-def login():
+@app.route('/api/users/<id>', methods=['GET'])
+def login(id):
     agent = {
-        "user_name": "intSer",
-        "password": "123456",
+
+        "id": id
     }
     # Perform any necessary operations or retrieve data from a database
-    agent_login = db.get_agent(agent)
-    return jsonify(agent_login)
+    agent_details = db.get_agent(agent)
+    return jsonify(agent_details)
+
 @app.route('/api/data', methods=['GET'])
 def get_data():
     # Perform any necessary operations or retrieve data from a database
@@ -42,7 +47,11 @@ def get_data():
 def get_skills_to_fill():
     # Perform any necessary operations or retrieve data from a database
     skills = db.get_client_skills()
+    # Convert ObjectId to string
+    skills = json.loads(json_util.dumps(skills))
+
     return jsonify(skills)
+
 
 @app.route('/api/skills_template', methods=['GET'])
 def get_skills_template():
@@ -78,6 +87,7 @@ def post_transcription():
 
 
 if __name__ == '__main__':
+    print("try")
     config = load_config_file("configuration.json")
     voice_config = load_config_file("Utils/config_voice.json")
     emotions_models = voice_config["emotions_models"]

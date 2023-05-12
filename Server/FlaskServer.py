@@ -5,6 +5,7 @@ from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from Utils import InitUtil as IU
 from bson import json_util
+from Models.simulation import Simulation
 
 
 
@@ -25,6 +26,11 @@ def get_client_agent_strongs(db):
     client_personals = client_skills[0]
     client_emotions = client_skills[1]
     return agent_skills, client_personals, client_emotions
+def save_agent_db(db,sim_id,skills):
+    agent = db.get_agent("NglT4UH7dzTYD6EEmW64NvzKQZ82")
+    agent.add_simulation(sim_id)
+    agent.update_skills(skills)
+    db.update_agent(agent)
 
 def load_config_file(config_path):
     # Load the configuration from the JSON file
@@ -76,6 +82,8 @@ def get_skills_template():
 @app.route('/api/get_review', methods=['GET'])
 def get_review():
     result = simulator.review_simulation(simulation_id)
+    skill_result = [4,2,7,3,6,5,3]
+    save_agent_db(db, simulation_id, skill_result)
     return jsonify(result)
 
 @app.route('/api/transcription_exchange', methods=['POST'])
@@ -108,6 +116,7 @@ def get_company_description():
     simulation_id = simulator.start_simulation(config["CompanyInfo"], emotions,
                                                personality,
                                                situation_description)
+
 
 
 if __name__ == '__main__':

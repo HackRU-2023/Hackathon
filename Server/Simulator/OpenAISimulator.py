@@ -10,8 +10,8 @@ class OpenAISimulator(Simulator):
 
     def __init__(self):
         super().__init__()
-        self.model_engine = "gpt-3.5-turbo"
-        self.openai_api_key = "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"
+        self.model_engine = "<model>"
+        self.openai_api_key = "<key>"
         self.connect()
         self.simulations = {}
 

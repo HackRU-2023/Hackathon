@@ -19,7 +19,7 @@ emotion = "NATURAL"
 
 
 def get_client_agent_strongs(db):
-    agent = db.get_agent("NglT4UH7dzTYD6EEmW64NvzKQZ82")
+    agent = db.get_agent("<key>")
     agent_skills = agent.skills
     client_skills = db.get_client_skills_yuval()
 
@@ -27,7 +27,7 @@ def get_client_agent_strongs(db):
     client_emotions = client_skills[1]
     return agent_skills, client_personals, client_emotions
 def save_agent_db(db,sim_id,skills):
-    agent = db.get_agent("NglT4UH7dzTYD6EEmW64NvzKQZ82")
+    agent = db.get_agent("<key>")
     agent.add_simulation(sim_id)
     agent.update_skills(skills)
     db.update_agent(agent)

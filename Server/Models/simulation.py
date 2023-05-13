@@ -6,8 +6,8 @@ class Simulation:
     summary = ""
     recording = ""
 
-    def __init__(self,description, problem,training_skills, owner, status="error"):
-        self.id = int(uuid.uuid4().int) % (10 ** 4)
+    def __init__(self, id, description, problem,training_skills, owner="123", status="error"):
+        self.id = id
         datenow = datetime.datetime.now()
         self.date = datenow.strftime("%Y-%m-%d %H:%M:%S")
         self.description = description

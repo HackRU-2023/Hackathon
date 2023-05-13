@@ -3,6 +3,7 @@ import time
 import openai
 from Server.Simulator.Simulation import Simulation
 from Server.Simulator.Simulator import Simulator
+from Server.Models.simulation import Simulation as save_sim
 
 
 class OpenAISimulator(Simulator):
@@ -19,6 +20,9 @@ class OpenAISimulator(Simulator):
 
     def start_simulation(self, company_description, emotions, personality, call_subject):
         simulation = Simulation(company_description, emotions, personality, call_subject)
+        training_skills = simulation.personality + simulation.emotions
+        save_simulation = Simulation(simulation.simulation_id,company_description, company_description,training_skills, owner)
+
         self.simulations[str(simulation.simulation_id)] = simulation
         return str(simulation.simulation_id)
 

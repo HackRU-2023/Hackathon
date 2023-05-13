@@ -48,8 +48,8 @@ const Simulator = ({ simulatorConfig, setView, setResults }) => {
 
     // Set up your Azure Speech API key and region
     const speechConfig = SpeechConfig.fromSubscription(
-      "f7d8cf826d7644f2bbbb73e3a04e00c6",
-      "eastus"
+      "<secret_key>",
+      "<region>"
     );
 
     // Configure the audio input to use the default microphone

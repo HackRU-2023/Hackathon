@@ -2,9 +2,9 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
 
-URI = "mongodb+srv://hackRuG36:th123456@cluster0.cooaizb.mongodb.net/?retryWrites=true&w=majority"
+URI = "<secret_uri>"
 
-# mongodb://192.168.1.154:27017
+
 class InitMongo:
     def __init__(self):
         self._client = MongoClient(URI, server_api=ServerApi('1'))

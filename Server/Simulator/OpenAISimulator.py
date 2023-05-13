@@ -51,7 +51,7 @@ class OpenAISimulator(Simulator):
             model=self.model_engine,
             messages=[{"role": "system", "content": request + f'\nHere is the full simulation: {conversation}'}]
         )
-        response = f"- Initial mood: {simulation.emotions}\n- Simulation Time: {time.time() - self.simulations[simulation_id].simulation_start_time}\n- Review:\n" + \
+        response = f"- Initial mood: {simulation.emotions}\n- Simulation Time: {round(time.time() - self.simulations[simulation_id].simulation_start_time,2)}\n- Review:\n" + \
                    completion['choices'][0]['message']['content']
         return response
 

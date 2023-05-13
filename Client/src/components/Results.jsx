@@ -1,48 +1,30 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 
-const Results = (results) => {
-  const [callGrades, setCallGrades] = useState([]);
-  const [userGrades, setUserGrades] = useState([]);
-
-  useEffect(() => {
-    const fetchCallGrades = async () => {
-      const response = await axios.get("/api/call-grades");
-      setCallGrades(response.data);
-    };
-
-    const fetchUserGrades = async () => {
-      const response = await axios.get("/api/user-grades");
-      setUserGrades(response.data);
-    };
-
-    fetchCallGrades();
-    fetchUserGrades();
-  }, []);
-
-  const renderBars = (grades, color) => {
-    return grades.map((grade, index) => (
-      <div
-        key={index}
-        className={`bg-${color}-500 h-4 w-${grade * 10}`}
-        style={{ width: `${grade * 10}%` }}
-      ></div>
-    ));
+const Results = ({ results }) => {
+  const renderResults = () => {
+    if (results && results) {
+      const parts = results.split(" - ");
+      return parts.map((part, index) => {
+        const lines = part.split("\n").map((line, lineIndex) => (
+          <React.Fragment key={lineIndex}>
+            {line}
+            <br />
+          </React.Fragment>
+        ));
+        return (
+          <p key={index} className="mb-4 text-lg text-black font-semibold">
+            {lines}
+          </p>
+        );
+      });
+    }
+    return null;
   };
 
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-2xl font-bold mb-4">Results</h1>
-      <div className="grid grid-cols-2 gap-8">
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Call Grades</h2>
-          <div className="space-y-2">{renderBars(callGrades, "blue")}</div>
-        </div>
-        <div>
-          <h2 className="text-xl font-semibold mb-2">User Grades</h2>
-          <div className="space-y-2">{renderBars(userGrades, "green")}</div>
-        </div>
-      </div>
+    <div className="container bg-gray-400 mx-auto px-4 py-6 space-y-6  shadow-lg rounded-md">
+      <h1 className="text-4xl font-bold text-black">Results</h1>
+      {renderResults()}
     </div>
   );
 };

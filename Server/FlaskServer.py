@@ -55,13 +55,13 @@ def get_skills_to_fill():
     skills = db.get_client_skills()
     # Convert ObjectId to string
     skills = json.loads(json_util.dumps(skills))
-
+    print(skills)
     return jsonify(skills)
 
- jsonify(agent)
-app.route('/api/get_agent', methods=['GET'])
+ #jsonify(agent)
+@app.route('/api/get_agent', methods=['GET'])
 def get_agent():
-    agent_id = request.json.get('agent_id')
+    agent_id = request.args.get('agent_id')  # get agent_id from the query string
     agent = db.get_login(agent_id)
     agent = json.loads(json_util.dumps(agent))
     return jsonify(agent)
@@ -106,12 +106,14 @@ def get_company_description():
     emotions = request.json.get('emotions')
     personality = request.json.get('personality')
     situation_description = request.json.get('situation_description')
+    global simulation_id
     simulation_id = simulator.start_simulation(config["CompanyInfo"], emotions,
                                                personality,
                                                situation_description)
-
+    return ""
 
 if __name__ == '__main__':
+    simulation_id = None
 
     db_connection = InitMongo()
     db = DataBase(db_connection)
@@ -121,7 +123,6 @@ if __name__ == '__main__':
     emotions_models = voice_config["emotions_models"]
 
     simulator = OpenAISimulator()
-    simulation_id = None
 
     voice = Voice(local_config)
     #res = IU.InitUtil.matching_customer(simulator.model_engine,db)

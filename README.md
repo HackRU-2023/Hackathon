@@ -11,7 +11,7 @@ Although we didn't make it to the top three, we learned a lot from the experienc
 ## Technologies
 
 Our project is built using the following technologies:
-
+![githubArchi](https://github.com/HackRU-2023/Hackathon/assets/101135982/0239a2b3-2b15-4df4-bba1-94cbca804ee3)
 - **Frontend:** React, TailwindCSS
 - **Backend:** Flask
 - **Database:** MongoDB

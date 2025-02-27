@@ -1,5 +1,5 @@
 # Project: Customer Service Simulator
-
+# Youtube (1 min): https://youtu.be/wynRVzCSY7c
 ## About
 
 We are a group of five friends from Braude, partnered with **Nice** - a leading global enterprise software provider, to develop a web application as a part of a hackathon held at Reichman University. The project was a great blend of fun and learning, resulting in a product that we are immensely proud of.
@@ -20,7 +20,7 @@ Our project is built using the following technologies:
 
 ## Project Walkthrough
 
-We have created a walkthrough video to help you understand our project better. You can find the video [here](https://drive.google.com/file/d/1MzLz5rDuOv3A9InZ7gfJ8R1Vf0NTRJ10/view).
+We have created a walkthrough video to help you understand our project better. You can find the video [here](https://youtu.be/wynRVzCSY7c).
 
 ## Future Plans
 
